@@ -13,7 +13,8 @@ public:
 	void chromacalc(float frame[]);
 	void initialise(int framesize,int hsize);
 	void processframe(float frame[]);
-		
+//	void processFrame(float* frame, int length);	
+	
 	float rawChroma[12];	
 	float chroma[12];
 	float chroma_low[12];

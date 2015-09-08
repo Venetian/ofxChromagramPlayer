@@ -42,7 +42,7 @@ Chromagram :: Chromagram()
 Chromagram :: ~Chromagram()
 {
 	// destroy fft plan
-    fftwf_destroy_plan(p);
+   // fftwf_destroy_plan(p); - causes problem - why? (Andrew R)
 	
 	// deallocate memory
 	win = NULL;	
@@ -94,10 +94,10 @@ void Chromagram :: processframe(float frame[])
 		j = 0;
 		for (i = c;i < c+(fsize/4);i++)
 		{
-			hop[i] = d_frame[j];
+			hop[i] = d_frame[j];//d_frame is downsampled
 			j++;
 		}
-		count = count + 1;
+		count++;// = count + 1;
 	}
 	    
     if (count == calcrate)
@@ -120,6 +120,56 @@ void Chromagram :: processframe(float frame[])
     }
 
 }
+/*
+// Processes a single frame
+void Chromagram :: processFrame(float* frame, int length){
+	if (length == 8192){
+	
+	int i;
+	int j;
+	int c;
+	
+	chromaready = 0; // default case that chroma isn't ready
+	
+	// downsample frame
+	downsampleframe(frame);
+	
+	if (count < calcrate)
+	{
+        c = count*(fsize/4);
+		
+		j = 0;
+		for (i = c;i < c+(fsize/4);i++)
+		{
+			hop[i] = d_frame[j];
+			j++;
+		}
+		count = count + 1;
+	}
+	
+    if (count == calcrate)
+	{
+		for (i=0;i < 8192-hopsize;i++)
+		{
+			buffer[i] = buffer[i+hopsize];
+		}
+		
+		j = 0;
+		for (i=8192-hopsize;i < bsize;i++)
+		{
+			buffer[i] = hop[j];
+			j++;
+		}
+		
+		chromacalc(buffer);
+		
+        count = 0;
+    }
+	}
+	
+}
+*/
+
 
 //--------------------------------------------------------------------------------------
 // Processes a single frame
